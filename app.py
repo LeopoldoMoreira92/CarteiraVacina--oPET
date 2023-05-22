@@ -9,9 +9,9 @@ class jogos:
         self.categoria = categoria
         self.console = console
 
-jogo1 = jogos("Tibia","RPG","PC")
-jogo2 = jogos("Ragnarok","RPG","PC")
-jogo3 = jogos("Gun Bound","Estratégia","PC")
+jogo1 = jogos("Bruce","Antirrábica","05/02/2023")
+jogo2 = jogos("Tony","V10","21/03/2023")
+jogo3 = jogos("Max","V8","05/01/2022")
 lista = [jogo1,jogo2,jogo3]
 
 class Usuario:
@@ -33,7 +33,7 @@ def index():
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
         return redirect(url_for('login',proxima=url_for('index')))
     else:
-        return render_template('lista.html',nome="Jogos",jogos = lista, titulo ='Jogoteca')
+        return render_template('lista.html',nome="Nome do Pet",jogos = lista, titulo ='Carteira de Vacinação Digital')
 
 @app.route('/novojogo')
 def novojogo():
