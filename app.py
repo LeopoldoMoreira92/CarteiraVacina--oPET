@@ -23,13 +23,17 @@ class Usuario:
 usuario1 = Usuario('Leopoldo','Fujiro','Tibiao')
 usuario2 = Usuario('Camila Ferreira','Cafe','Pao')
 usuario3 = Usuario('Guilherme','Louro','cake')
+
 usuarios = {usuario1.nickname : usuario1,
             usuario2.nickname : usuario2,
             usuario3.nickname : usuario3}   
 
 @app.route('/')
 def index():
-    return render_template('lista.html',nome="Jogos",jogos = lista, titulo ='Jogoteca')
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
+        return redirect(url_for('login',proxima=url_for('index')))
+    else:
+        return render_template('lista.html',nome="Jogos",jogos = lista, titulo ='Jogoteca')
 
 @app.route('/novojogo')
 def novojogo():
@@ -56,12 +60,12 @@ def login():
 @app.route('/autenticar', methods=["POST",])
 def autenticar():
     if request.form['usuario'] in usuarios:
-        usuario = request.form['usuario']
-        if request.form['senha'] == usuarios.senha:
+        usuario = usuarios[request.form['usuario']]
+        if request.form['senha'] == usuario.senha:
             session['usuario_logado'] = usuario.nickname
-        flash( f'{usuario.nickname} logado com sucesso!')
-        proxima_pagina = request.form['proxima']
-        return redirect(proxima_pagina) 
+            flash( f'{usuario.nickname} logado com sucesso!')
+            proxima_pagina = request.form['proxima']
+            return redirect(proxima_pagina) 
     else:
         flash('Usuario não logado')
         return redirect(url_for('login'))
