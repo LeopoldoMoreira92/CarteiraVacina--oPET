@@ -9,10 +9,7 @@ class jogos:
         self.categoria = categoria
         self.console = console
 
-jogo1 = jogos("Bruce","Antirrábica","05/02/2023")
-jogo2 = jogos("Tony","V10","21/03/2023")
-jogo3 = jogos("Max","V8","05/01/2022")
-lista = [jogo1,jogo2,jogo3]
+lista = []
 
 class Usuario:
     def __init__(self,nome, nickname,senha):
@@ -20,7 +17,7 @@ class Usuario:
         self.nickname = nickname
         self.senha = senha
 
-usuario1 = Usuario('Leopoldo','Fujiro','Tibiao')
+usuario1 = Usuario('Leopoldo Moreira','leopoldo','123456')
 usuario2 = Usuario('Camila Ferreira','Cafe','Pao')
 usuario3 = Usuario('Guilherme','Louro','cake')
 
@@ -35,13 +32,13 @@ def index():
     else:
         return render_template('lista.html',nome="Nome do Pet",jogos = lista, titulo ='Carteira de Vacinação Digital')
 
-@app.route('/novojogo')
-def novojogo():
+@app.route('/novavacina')
+def novavacina():
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
         flash('Você precisa logar')
-        return redirect(url_for('login',proxima=url_for('novojogo')))
+        return redirect(url_for('login',proxima=url_for('novavacina'))) 
     else:
-        return render_template('novojogo.html', titulo="Novo Jogo")
+        return render_template('novavacina.html', titulo="Nova Vacina")
         
 @app.route('/criar', methods =["POST",])
 def criar():
@@ -66,8 +63,12 @@ def autenticar():
             flash( f'{usuario.nickname} logado com sucesso!')
             proxima_pagina = request.form['proxima']
             return redirect(proxima_pagina) 
+        else:
+            flash('Usuario ou Senha invalida! =(')
+            return redirect(url_for('login'))
+            
     else:
-        flash('Usuario não logado')
+        flash('Usuario ou senha invalida =(')
         return redirect(url_for('login'))
     
 @app.route('/logout')
